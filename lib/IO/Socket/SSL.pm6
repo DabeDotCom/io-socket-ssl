@@ -21,6 +21,8 @@ has Bool $.listening;
 has Str $.input-line-separator is rw = "\n";
 has Int $.ins = 0;
 
+has OpenSSL::ProtocolVersion $.protocol-version = -1;
+
 has $.client-socket;
 has $.listen-socket;
 has $.accepted-socket;
@@ -64,7 +66,7 @@ method !initialize {
         $!socket = $!client-socket || IO::Socket::INET.new(:host($!host), :port($!port));
 
         # handle errors
-        $!ssl = OpenSSL.new(:client);
+        $!ssl = OpenSSL.new(:client, :version($!protocol-version));
         $!ssl.set-socket($!socket);
         $!ssl.set-connect-state;
         my $ret = $!ssl.connect;
