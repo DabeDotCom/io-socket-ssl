@@ -68,6 +68,7 @@ method !initialize {
         # handle errors
         $!ssl = OpenSSL.new(:client, :version($!protocol-version));
         $!ssl.set-socket($!socket);
+        $!ssl.set-sni-hostname($!host) if $!host;
         $!ssl.set-connect-state;
         my $ret = $!ssl.connect;
         if $ret < 0 {
